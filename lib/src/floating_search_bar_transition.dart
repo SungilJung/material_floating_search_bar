@@ -32,7 +32,20 @@ abstract class FloatingSearchBarTransition {
   FloatingSearchBarStyle get style => searchBar.style;
 
   double get offset => searchBar.offset;
-  double get fullHeight => context.height ?? 0.0;
+  double get fullHeight {
+    var height = context.height ?? 0.0;
+
+    if (height != 0.0) {
+      final insets = EdgeInsets.fromWindowPadding(
+          WidgetsBinding.instance!.window.viewInsets,
+          WidgetsBinding.instance!.window.devicePixelRatio);
+
+      height += insets.bottom * 1.2;
+    }
+
+    return height;
+  }
+
   double get fullWidth => context.width ?? 0.0;
   double get height => style.height;
   double get elevation => style.elevation;
