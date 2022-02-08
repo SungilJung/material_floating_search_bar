@@ -17,30 +17,25 @@ abstract class ImplicitlyAnimatedWidget extends StatefulWidget {
 abstract class ImplicitlyAnimatedWidgetState<T,
         W extends ImplicitlyAnimatedWidget> extends State<W>
     with TickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final CurvedAnimation _animation;
+  late final _controller = AnimationController(
+    duration: widget.duration,
+    vsync: this,
+  )
+    ..value = 1.0
+    ..addListener(
+      () => setState(
+        () => value = lerp(oldValue, newValue, _animation.value),
+      ),
+    );
+
+  late var _animation = CurvedAnimation(
+    curve: widget.curve,
+    parent: _controller,
+  );
 
   T get newValue;
   late T value = newValue;
   late T oldValue = newValue;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: widget.duration,
-      vsync: this,
-    )
-      ..value = 1.0
-      ..addListener(() => setState(
-            () => value = lerp(oldValue, newValue, _animation.value),
-          ));
-
-    _animation = CurvedAnimation(
-      curve: widget.curve,
-      parent: _controller,
-    );
-  }
 
   @override
   void didUpdateWidget(W oldWidget) {
