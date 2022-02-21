@@ -596,7 +596,7 @@ class FloatingSearchBarState
     body = widget.builder(context, animation);
 
     final searchBar = SizedBox.expand(
-      child: (Platform.isIOS | Platform.isMacOS)
+      child: isAvailableSwipeBack
           ? _getSearchBarWidget()
           : WillPopScope(
         onWillPop: _onPop,
